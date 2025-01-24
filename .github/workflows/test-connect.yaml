@@ -20,4 +20,4 @@ jobs:
 
       - name: Test SSH Connection
         run: |
-          ssh -i ~/.ssh/id_ed25519 ${{ secrets.N_USER }}@${{ secrets.N_IP }} "echo 'Connection successful!'"
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.N_USERNAME }}@${{ secrets.N_IP }} "echo 'Connection successful!'"
