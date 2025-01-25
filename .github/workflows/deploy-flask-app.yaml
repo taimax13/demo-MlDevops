@@ -1,0 +1,38 @@
+name: Deploy Flask app
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build Docker image
+        run: docker build -t my-flask-app .
+
+      - name: Push Docker image
+        env:
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        run: |
+          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+          docker tag my-flask-app "$DOCKER_USERNAME"/my-flask-app
+          docker push "$DOCKER_USERNAME"/my-flask-app
+
+      - name: Deploy to virtual machine
+        env:
+          SSH_KEY: ${{ secrets.SSH_N_KEY }}
+          SSH_HOST: ${{ secrets.N_IP }}
+          SSH_USER: ${{ secrets.N_USERNAME }}
+        run: |
+          ssh -i "$SSH_KEY" "$SSH_USER@$SSH_HOST" <<EOF
+            docker pull taimax13/my-flask-app
+            docker stop my-flask-app
+            docker rm my-flask-app
+            docker run -d --name my-flask-app -p 5000:5000 taimax13/my-flask-app
+          EOF

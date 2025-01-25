@@ -13,7 +13,8 @@ def generator():
     )
 
     prompt = """
-        create terraform deploy, but please use aws terraform modules for AWS lambda from the docker image with eventbrige trigger
+        Hi, we have an application in flask which works on our localhost:5000 to be accesible on our virtual machine in the cloud. 
+        please prepare docker file and create github actions for us to run new deployment on virtual machine we are commiting something in master
     """
     response = client.chat.completions.create(
         model="Qwen/Qwen2-VL-72B-Instruct",
@@ -24,7 +25,7 @@ def generator():
                  "text": prompt}
             ],
         }],
-        max_tokens=700,
+        max_tokens=10000,
     )
 
     print(f"Response:{response.choices[0].message.content}")
