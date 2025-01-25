@@ -14,7 +14,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build Docker image
-        run: docker build -t my-flask-app .
+        run: |
+          cd deployment/python
+          docker build -t my-flask-app .
 
       - name: Push Docker image
         env:
