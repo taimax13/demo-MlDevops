@@ -15,7 +15,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          cd deployment/python
+          cd deployments/python
           docker build -t my-flask-app .
 
       - name: Push Docker image
